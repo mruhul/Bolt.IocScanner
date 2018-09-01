@@ -9,6 +9,8 @@
     <AssemblyName>Bolt.IocScanner</AssemblyName>
     <PackageId>Bolt.IocScanner</PackageId>
     <PackageTags>Bolt.IocScanner</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>../nupkgs</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">

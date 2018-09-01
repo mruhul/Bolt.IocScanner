@@ -9,6 +9,8 @@
     <AssemblyName>Bolt.IocAttributes</AssemblyName>
     <PackageId>Bolt.IocAttributes</PackageId>
     <PackageTags>Bolt.IocAttributes</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>../nupkgs</PackageOutputPath>
   </PropertyGroup>
 
 </Project>
