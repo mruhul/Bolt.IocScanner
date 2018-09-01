@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Shouldly;
+using Bolt.IocAttributes;
 
 namespace Bolt.IocScanner.Tests
 {

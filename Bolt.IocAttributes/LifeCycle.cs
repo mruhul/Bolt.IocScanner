@@ -1,4 +1,4 @@
-﻿namespace Bolt.IocScanner
+﻿namespace Bolt.IocAttributes
 {
     public enum LifeCycle
     {

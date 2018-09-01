@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Attributes to instruct bolt.iocscanner how to bind classes</Description>
+    <TargetFrameworks>netstandard2.0;netstandard1.6</TargetFrameworks>
+    <Version>0.1.0-beta1</Version>
+    <Authors>Mohammad Ruhul Amin</Authors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>Bolt.IocAttributes</AssemblyName>
+    <PackageId>Bolt.IocAttributes</PackageId>
+    <PackageTags>Bolt.IocAttributes</PackageTags>
+  </PropertyGroup>
+
+</Project>

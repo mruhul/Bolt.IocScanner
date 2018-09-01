@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bolt.IocScanner
+namespace Bolt.IocAttributes
 {
     public class AutoBindAttribute : Attribute
     {
