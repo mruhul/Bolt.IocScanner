@@ -82,30 +82,32 @@ namespace Bolt.IocScanner
 
                     if (autoBindAttribute == null && !options.BindAsTransientWhenAttributeMissing) continue;
 
-                    var useTryAdd = autoBindAttribute?.UseTryAdd ?? false;
-                    var lifeCycle = autoBindAttribute?.LifeCycle ?? LifeCycle.Transient;
+                    if(autoBindAttribute == null)
+                    {
+                        autoBindAttribute = new AutoBindAttribute(LifeCycle.Transient) { UseTryAdd = false };
+                    }
 
                     var interfaces = typeInfo.GetInterfaces();
 
                     if (!interfaces.Any())
                     {
-                        BindToSelf(source, type, lifeCycle, useTryAdd);
+                        BindToSelf(source, type, autoBindAttribute);
 
                         continue;
                     }
 
-                    BindToIntefaces(source, type, interfaces, lifeCycle, useTryAdd);
+                    BindToIntefaces(source, type, interfaces, autoBindAttribute);
                 }
             }
         }
 
-        private static void BindToIntefaces(IServiceCollection source, Type type, Type[] interfaces, LifeCycle lifeCycle, bool useTryAdd)
+        private static void BindToIntefaces(IServiceCollection source, Type type, Type[] interfaces, AutoBindAttribute attr)
         {
-            switch (lifeCycle)
+            switch (attr.LifeCycle)
             {
                 case LifeCycle.Transient:
                     {
-                        if (useTryAdd)
+                        if (attr.UseTryAdd)
                         {
                             foreach (var interfaceImplemented in interfaces)
                             {
@@ -124,56 +126,134 @@ namespace Bolt.IocScanner
                     }
                 case LifeCycle.Scoped:
                     {
-                        if (useTryAdd)
+                        if (attr.UseTryAdd)
                         {
-                            foreach (var interfaceImplemented in interfaces)
-                            {
-                                source.TryAdd(ServiceDescriptor.Scoped(interfaceImplemented, type));
-                            }
+                            TryBindAsScoped(source, type, interfaces, attr);
                         }
                         else
                         {
-                            foreach (var interfaceImplemented in interfaces)
-                            {
-                                source.Add(ServiceDescriptor.Scoped(interfaceImplemented, type));
-                            }
+                            BindAsScoped(source, type, interfaces, attr);
                         }
 
                         break;
                     }
                 case LifeCycle.Singleton:
                     {
-                        if (useTryAdd)
+                        if (attr.UseTryAdd)
                         {
-                            foreach (var interfaceImplemented in interfaces)
-                            {
-                                source.TryAdd(ServiceDescriptor.Singleton(interfaceImplemented, type));
-                            }
+                            TryBindAsSingleton(source, type, interfaces, attr);
                         }
                         else
                         {
-                            foreach (var interfaceImplemented in interfaces)
-                            {
-                                source.Add(ServiceDescriptor.Singleton(interfaceImplemented, type));
-                            }
+                            BindAsSingleton(source, type, interfaces, attr);
                         }
 
                         break;
                     }
                 default:
                     {
-                        throw new Exception($"Unsupported LifcycleType {lifeCycle} provided");
+                        throw new Exception($"Unsupported LifcycleType {attr.LifeCycle} provided");
                     }
             }
         }
 
-        private static void BindToSelf(IServiceCollection source, Type type, LifeCycle lifeCycle, bool useTryAdd)
+        private static void TryBindAsSingleton(IServiceCollection source, Type type, Type[] interfaces, AutoBindAttribute attr)
         {
-            switch (lifeCycle)
+            if (interfaces.Length > 1)
+            {
+                var firstInterface = interfaces[0];
+
+                source.TryAdd(ServiceDescriptor.Singleton(firstInterface, type));
+
+                for (var i = 1; i < interfaces.Length; i++)
+                {
+                    source.TryAdd(ServiceDescriptor.Singleton(interfaces[i], sp => sp.GetService(firstInterface)));
+                }
+            }
+            else
+            {
+                foreach (var interfaceImplemented in interfaces)
+                {
+                    source.TryAdd(ServiceDescriptor.Singleton(interfaceImplemented, type));
+                }
+            }
+        }
+
+        private static void BindAsSingleton(IServiceCollection source, Type type, Type[] interfaces, AutoBindAttribute attr)
+        {
+            if (interfaces.Length > 1)
+            {
+                var firstInterface = interfaces[0];
+
+                source.Add(ServiceDescriptor.Singleton(firstInterface, type));
+
+                for (var i = 1; i < interfaces.Length; i++)
+                {
+                    source.Add(ServiceDescriptor.Singleton(interfaces[i], sp => sp.GetService(firstInterface)));
+                }
+            }
+            else
+            {
+                foreach (var interfaceImplemented in interfaces)
+                {
+                    source.Add(ServiceDescriptor.Singleton(interfaceImplemented, type));
+                }
+            }
+        }
+
+
+        private static void TryBindAsScoped(IServiceCollection source, Type type, Type[] interfaces, AutoBindAttribute attr)
+        {
+            if (interfaces.Length > 1)
+            {
+                var firstInterface = interfaces[0];
+
+                source.TryAdd(ServiceDescriptor.Scoped(firstInterface, type));
+
+                for (var i = 1; i < interfaces.Length; i++)
+                {
+                    source.TryAdd(ServiceDescriptor.Scoped(interfaces[i], sp => sp.GetService(firstInterface)));
+                }
+            }
+            else
+            {
+                foreach (var interfaceImplemented in interfaces)
+                {
+                    source.TryAdd(ServiceDescriptor.Scoped(interfaceImplemented, type));
+                }
+            }
+        }
+
+        private static void BindAsScoped(IServiceCollection source, Type type, Type[] interfaces, AutoBindAttribute attr)
+        {
+            if (interfaces.Length > 1)
+            {
+                var firstInterface = interfaces[0];
+
+                source.Add(ServiceDescriptor.Scoped(firstInterface, type));
+
+                for (var i = 1; i < interfaces.Length; i++)
+                {
+                    source.Add(ServiceDescriptor.Scoped(interfaces[i], sp => sp.GetService(firstInterface)));
+                }
+            }
+            else
+            {
+                foreach (var interfaceImplemented in interfaces)
+                {
+                    source.Add(ServiceDescriptor.Scoped(interfaceImplemented, type));
+                }
+            }
+        }
+
+
+        private static void BindToSelf(IServiceCollection source, Type type, AutoBindAttribute attr)
+        {
+            switch (attr.LifeCycle)
             {
                 case LifeCycle.Transient:
                     {
-                        if (useTryAdd)
+                        if (attr.UseTryAdd)
                         {
                             source.TryAddTransient(type);
                         }
@@ -186,7 +266,7 @@ namespace Bolt.IocScanner
                     }
                 case LifeCycle.Scoped:
                     {
-                        if (useTryAdd)
+                        if (attr.UseTryAdd)
                         {
                             source.TryAddScoped(type);
                         }
@@ -199,7 +279,7 @@ namespace Bolt.IocScanner
                     }
                 case LifeCycle.Singleton:
                     {
-                        if (useTryAdd)
+                        if (attr.UseTryAdd)
                         {
                             source.TryAddSingleton(type);
                         }
@@ -212,7 +292,7 @@ namespace Bolt.IocScanner
                     }
                 default:
                     {
-                        throw new Exception($"Unsupported LifcycleType {lifeCycle} provided");
+                        throw new Exception($"Unsupported LifcycleType {attr.LifeCycle} provided");
                     }
             }
         }
