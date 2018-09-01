@@ -1,7 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Description>Scan and bind your classes in Ioc automatically</Description>
     <TargetFrameworks>netstandard2.0;netstandard1.6</TargetFrameworks>
+    <Version>0.1.0</Version>
+    <Authors>Mohammad Ruhul Amin</Authors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>Bolt.IocScanner</AssemblyName>
+    <PackageId>Bolt.IocScanner</PackageId>
+    <PackageTags>Bolt.IocScanner</PackageTags>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
