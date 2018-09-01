@@ -36,7 +36,8 @@ namespace Bolt.IocScanner.Tests
         {
             _sp = new ServiceProviderHelper(new[] { typeof(HelloWorldSelfBind).Assembly }, new IocScannerOptions
             {
-                TypesToExclude = new[] { typeof(ExcludeHelloWorldFromExcludeList) }
+                TypesToExclude = new[] { typeof(ExcludeHelloWorldFromExcludeList) },
+                BindAsTransientWhenAttributeMissing = true
             });
         }
 

@@ -11,16 +11,48 @@ namespace Bolt.IocScanner
     public class IocScannerOptions
     {
         public IEnumerable<Type> TypesToExclude { get; set; }
-        public bool SkipAutoBindWhenAttributesMissing { get; set; }
+        public bool BindAsTransientWhenAttributeMissing { get; set; }
     }
 
     public static class ServiceCollectionExtensions
     {
+#if !NETSTANDARD1_6
+        /// <summary>
+        /// Scane calling assembly and bind all classes in that assembly automatically to service collection based on attribute and convention
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="options"></param>
+        public static void Scan(this IServiceCollection source, IocScannerOptions options)
+        {
+            Scan(source, new[] { Assembly.GetCallingAssembly() }, null);
+        }
+
+        /// <summary>
+        /// Scane calling assembly and autobind all classes in that assembly
+        /// </summary>
+        /// <param name="source"></param>
+        public static void Scan(this IServiceCollection source)
+        {
+            Scan(source, new[] { Assembly.GetCallingAssembly() }, null);
+        }
+#endif
+
+        /// <summary>
+        /// Scan supplied assemblies and bind them automatically to service collection based on attribute and convention
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="assemblies"></param>
         public static void Scan(this IServiceCollection source, IEnumerable<Assembly> assemblies)
         {
             Scan(source, assemblies, null);
         }
 
+
+        /// <summary>
+        /// Scan supplied assemblies and bind them automatically to service collection based on attribute and convention
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="assemblies"></param>
         public static void Scan(this IServiceCollection source, IEnumerable<Assembly> assemblies, IocScannerOptions options)
         {
             options = options ?? new IocScannerOptions();
@@ -48,7 +80,7 @@ namespace Bolt.IocScanner
 
                     var autoBindAttribute = attributes.FirstOrDefault(x => x.GetType().FullName == autoBindAttributeFullName) as AutoBindAttribute;
 
-                    if (autoBindAttribute == null && options.SkipAutoBindWhenAttributesMissing) continue;
+                    if (autoBindAttribute == null && !options.BindAsTransientWhenAttributeMissing) continue;
 
                     var useTryAdd = autoBindAttribute?.UseTryAdd ?? false;
                     var lifeCycle = autoBindAttribute?.LifeCycle ?? LifeCycle.Transient;

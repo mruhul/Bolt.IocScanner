@@ -22,11 +22,11 @@ namespace Bolt.IocScanner.Tests
         }
 
         [Fact]
-        public void Ignore_Classes_That_Doesnt_Have_AutoBind_Attribute_When_SkipAutoBindWhenAttributesMissing_Is_True()
+        public void Ignore_Classes_That_Doesnt_Have_AutoBind_Attribute_When_BindAsTransientWhenAttributeMissing_Is_False()
         {
             var sp = new ServiceProviderHelper(new[] { typeof(IgnoreHelloWorldWithoutAutoBind).Assembly }, new IocScannerOptions
             {
-                SkipAutoBindWhenAttributesMissing = true
+                BindAsTransientWhenAttributeMissing = false
             });
 
             var sut = sp.GetService<IgnoreHelloWorldWithoutAutoBind>();
