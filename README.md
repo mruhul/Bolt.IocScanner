@@ -133,7 +133,7 @@ Theres four ways you can do this.
 
 ## Does it bind to all implemented interfaces?
 
-Yes if a class implement more than one interfaces the lib bind the class agains all interfaces. In case of Singleton and Scoped lifecycle all interface bind agains same instance. For example:
+Yes if a class implement more than one interfaces the lib bind the class against all interfaces. In case of Singleton and Scoped lifecycle all interface bind against same instance. For example:
 
     [AutoBind(LifeCycle.Singleton)]
     public class Implementation : IProvideName, IProvidePrice
