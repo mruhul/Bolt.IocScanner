@@ -11,6 +11,7 @@
     <PackageTags>Bolt.IocScanner</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>../nupkgs</PackageOutputPath>
+    <PackageProjectUrl>https://github.com/mruhul/Bolt.IocScanner</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">

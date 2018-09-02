@@ -25,7 +25,7 @@ Now all classes in the same assembly of Startup class will be scanned and automa
         }
     }
 
-You don't need to go th startup class and add code to register this proxy class to servicecollection. you can readily use this class in your controller or any other dependent classes. For example
+You don't need to open the startup class and add code to register this proxy class to servicecollection. you can readily use this class in your controller or any other dependent classes. For example
 
     public class BooksController : Controller
     {
@@ -50,7 +50,7 @@ Yes you can. Here is an example:
         });
     }
 
-## How can I bind a calss to self without using an inteface?
+## How can I bind a class to self without using an inteface?
 
 If a class doesn't implement any interface and the class is not abstract then the class bind to self as transient. See example below:
 
