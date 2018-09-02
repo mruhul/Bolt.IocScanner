@@ -38,6 +38,18 @@ You don't need to go th startup class and add code to register this proxy class 
     }
 
 
+## Can I scan mutiple assemblies?
+
+Yes you can. Here is an example:
+    
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.Scan(new []{
+            typeof(BookStore.Web.Startup).Assembly,
+            typeof(BookStore.Infrastructure.ISerializer).Assembly
+        });
+    }
+
 ## How can I bind a calss to self without using an inteface?
 
 If a class doesn't implement any interface and the class is not abstract then the class bind to self as transient. See example below:
@@ -80,7 +92,7 @@ By default all bindings use transient lifecycle. If you want different lifecycle
 
 ## How I can exclude some classes from automatic binding?
 
-Theres three ways you can do this.
+Theres four ways you can do this.
 
 ### You can decorate the class that you want to exclude using an attribute
 
@@ -109,6 +121,15 @@ Theres three ways you can do this.
             SkipWhenAutoBindMissing = true
         });
     }
+
+### you can even pass your own logic to exclude any types using a func as below
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.Scan<Startup>(new IocScannerOptions()
+            .Exclude(t => t.Name.Equals("Startup")));
+    }
+
 
 ## Does it bind to all implemented interfaces?
 
