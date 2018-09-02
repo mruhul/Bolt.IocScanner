@@ -1,5 +1,5 @@
 # Bolt.IocScanner
-A utlity library that Scan and bind your classes automatically to Ioc
+A utlity library that scan and bind your classes automatically to Ioc
 
 ## How I use this library?
 
