@@ -26,7 +26,7 @@ namespace Bolt.IocScanner.Tests
         {
             var sp = new ServiceProviderHelper(new[] { typeof(IgnoreHelloWorldWithoutAutoBind).Assembly }, new IocScannerOptions
             {
-                BindAsTransientWhenAttributeMissing = false
+                SkipWhenAutoBindMissing = true
             });
 
             var sut = sp.GetService<IgnoreHelloWorldWithoutAutoBind>();

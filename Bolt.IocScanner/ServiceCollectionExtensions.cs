@@ -10,41 +10,50 @@ namespace Bolt.IocScanner
 {
     public class IocScannerOptions
     {
+        internal List<Func<Type,bool>> Excludes { get; set; }
+
+        public IocScannerOptions Exclude(Func<Type, bool> exlclude)
+        {
+            if (Excludes == null) Excludes = new List<Func<Type, bool>>();
+
+            Excludes.Add(exlclude);
+
+            return this;
+        }
+
         public IEnumerable<Type> TypesToExclude { get; set; }
-        public bool BindAsTransientWhenAttributeMissing { get; set; }
+        public bool SkipWhenAutoBindMissing { get; set; }
     }
 
     public static class ServiceCollectionExtensions
     {
-#if !NETSTANDARD1_6
         /// <summary>
         /// Scane calling assembly and bind all classes in that assembly automatically to service collection based on attribute and convention
         /// </summary>
         /// <param name="source"></param>
         /// <param name="options"></param>
-        public static void Scan(this IServiceCollection source, IocScannerOptions options)
+        public static IServiceCollection Scan<T>(this IServiceCollection source, IocScannerOptions options)
         {
-            Scan(source, new[] { Assembly.GetCallingAssembly() }, null);
+            return Scan(source, new[] { typeof(T).GetTypeInfo().Assembly }, options);
         }
 
         /// <summary>
         /// Scane calling assembly and autobind all classes in that assembly
         /// </summary>
         /// <param name="source"></param>
-        public static void Scan(this IServiceCollection source)
+        public static IServiceCollection Scan<T>(this IServiceCollection source)
         {
-            Scan(source, new[] { Assembly.GetCallingAssembly() }, null);
+            return Scan(source, new[] { typeof(T).GetTypeInfo().Assembly }, null);
         }
-#endif
 
         /// <summary>
         /// Scan supplied assemblies and bind them automatically to service collection based on attribute and convention
         /// </summary>
         /// <param name="source"></param>
         /// <param name="assemblies"></param>
-        public static void Scan(this IServiceCollection source, IEnumerable<Assembly> assemblies)
+        public static IServiceCollection Scan(this IServiceCollection source, IEnumerable<Assembly> assemblies)
         {
-            Scan(source, assemblies, null);
+            return Scan(source, assemblies, null);
         }
 
 
@@ -53,12 +62,17 @@ namespace Bolt.IocScanner
         /// </summary>
         /// <param name="source"></param>
         /// <param name="assemblies"></param>
-        public static void Scan(this IServiceCollection source, IEnumerable<Assembly> assemblies, IocScannerOptions options)
+        public static IServiceCollection Scan(this IServiceCollection source, IEnumerable<Assembly> assemblies, IocScannerOptions options)
         {
             options = options ?? new IocScannerOptions();
 
             var skipAutoBindAttributeFullName = typeof(SkipAutoBindAttribute).FullName;
             var autoBindAttributeFullName = typeof(AutoBindAttribute).FullName;
+
+            if(options.TypesToExclude?.Any() ?? false)
+            {
+                options.Exclude(t => options.TypesToExclude.Any(e => e.FullName == t.FullName));
+            }
 
             foreach (var assembly in assemblies)
             {
@@ -68,7 +82,7 @@ namespace Bolt.IocScanner
                 {
                     var typeInfo = type.GetTypeInfo();
 
-                    var isAbstract = typeInfo.IsAbstract;
+                    var isAbstract = typeInfo.IsAbstract || typeInfo.IsInterface;
 
                     if (isAbstract) continue;
 
@@ -76,11 +90,11 @@ namespace Bolt.IocScanner
 
                     if (attributes.Any(a => a.GetType().FullName == skipAutoBindAttributeFullName)) continue;
 
-                    if (options.TypesToExclude?.Any(t => t.FullName == type.FullName) ?? false) continue;
+                    if (ShouldExclude(type, options)) continue;
 
                     var autoBindAttribute = attributes.FirstOrDefault(x => x.GetType().FullName == autoBindAttributeFullName) as AutoBindAttribute;
 
-                    if (autoBindAttribute == null && !options.BindAsTransientWhenAttributeMissing) continue;
+                    if (autoBindAttribute == null && options.SkipWhenAutoBindMissing) continue;
 
                     if(autoBindAttribute == null)
                     {
@@ -99,6 +113,21 @@ namespace Bolt.IocScanner
                     BindToIntefaces(source, type, interfaces, autoBindAttribute);
                 }
             }
+
+            return source;
+        }
+
+        private static bool ShouldExclude(Type type, IocScannerOptions options)
+        {
+            if (options.Excludes != null)
+            {
+                foreach (var func in options.Excludes)
+                {
+                    if (func.Invoke(type)) return true;
+                }
+            }
+
+            return false;
         }
 
         private static void BindToIntefaces(IServiceCollection source, Type type, Type[] interfaces, AutoBindAttribute attr)

@@ -21,6 +21,17 @@ namespace Bolt.IocScanner.Tests
             ServiceProvider = sc.BuildServiceProvider();
         }
 
+        public ServiceProviderHelper(IocScannerOptions options = null)
+        {
+            var sc = new ServiceCollection();
+
+            sc.Scan<ServiceProviderHelper>(
+                options
+            );
+
+            ServiceProvider = sc.BuildServiceProvider();
+        }
+
         public IServiceProvider ServiceProvider { get; set; }
 
         public T GetService<T>() => ServiceProvider.GetService<T>();
@@ -34,10 +45,10 @@ namespace Bolt.IocScanner.Tests
 
         public ServiceProviderFixture()
         {
-            _sp = new ServiceProviderHelper(new[] { typeof(HelloWorldSelfBind).Assembly }, new IocScannerOptions
+            _sp = new ServiceProviderHelper(new IocScannerOptions
             {
                 TypesToExclude = new[] { typeof(ExcludeHelloWorldFromExcludeList) },
-                BindAsTransientWhenAttributeMissing = true
+                SkipWhenAutoBindMissing = false
             });
         }
 
