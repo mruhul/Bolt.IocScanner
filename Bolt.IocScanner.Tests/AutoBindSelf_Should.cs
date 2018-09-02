@@ -31,6 +31,7 @@ namespace Bolt.IocScanner.Tests
         }
     }
 
+    [AutoBind]
     public class HelloWorldSelfBind
     {
         public string Hello()

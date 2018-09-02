@@ -52,8 +52,9 @@ Yes you can. Here is an example:
 
 ## How can I bind a class to self without using an inteface?
 
-If a class doesn't implement any interface and the class is not abstract then the class bind to self as transient. See example below:
+If a class doesn't implement any interface then the lib doesn't bind it automatically. You have to put AutoBind attribute to bind a class without interface. Then the library bind that class to self with lifecycle instructed in the attribute. See example below:
 
+    [AutoBind]
     public class BooksProxy
     {
         public Task<Book> Get(string id)

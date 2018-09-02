@@ -95,19 +95,22 @@ namespace Bolt.IocScanner
                     var autoBindAttribute = attributes.FirstOrDefault(x => x.GetType().FullName == autoBindAttributeFullName) as AutoBindAttribute;
 
                     if (autoBindAttribute == null && options.SkipWhenAutoBindMissing) continue;
-
-                    if(autoBindAttribute == null)
-                    {
-                        autoBindAttribute = new AutoBindAttribute(LifeCycle.Transient) { UseTryAdd = false };
-                    }
-
+                    
                     var interfaces = typeInfo.GetInterfaces();
 
                     if (!interfaces.Any())
                     {
-                        BindToSelf(source, type, autoBindAttribute);
+                        if (autoBindAttribute != null)
+                        {
+                            BindToSelf(source, type, autoBindAttribute);
+                        }
 
                         continue;
+                    }
+
+                    if (autoBindAttribute == null)
+                    {
+                        autoBindAttribute = new AutoBindAttribute(LifeCycle.Transient) { UseTryAdd = false };
                     }
 
                     BindToIntefaces(source, type, interfaces, autoBindAttribute);
