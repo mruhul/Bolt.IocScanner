@@ -108,6 +108,15 @@ namespace Bolt.IocScanner
                         continue;
                     }
 
+                    if (interfaces.Any(x => x == typeof(IServiceRegistry)))
+                    {
+                        var registry = Activator.CreateInstance(type) as IServiceRegistry;
+
+                        registry.Register(source);
+
+                        continue;
+                    }
+
                     if (autoBindAttribute == null)
                     {
                         autoBindAttribute = new AutoBindAttribute(LifeCycle.Transient) { UseTryAdd = false };
