@@ -156,4 +156,15 @@ Sometimes you want to change the registration of your implementation when you se
     }
 
 
+## I have complex setup. how can i define myself
+
+You can define in configureservices method inside startup as you use to do before, other option is write a class that implements IServiceRegistry that the lib will execute those implementation. Benefit of this you are not bound to startup class and you can organize your ioc registration code any folder you want. Help to achieve feature focused development and seperate code by feature. Sample implementation:
+
+    public class SampleRegistration : IServiceRegistry
+    {
+        public void Register(IServiceCollection serviceCollection)
+        {
+            serviceCollection.Bind(typeof(IDataProvider<,>),typeof(DefaultDataProvider<,>));
+        }
+    } 
 
