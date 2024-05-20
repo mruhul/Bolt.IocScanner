@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using Shouldly;
-using Bolt.IocAttributes;
 using System.Threading;
+using Bolt.IocScanner.Attributes;
 
 namespace Bolt.IocScanner.Tests
 {

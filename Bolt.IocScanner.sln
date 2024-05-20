@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bolt.IocScanner", "Bolt.Ioc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bolt.IocScanner.Tests", "Bolt.IocScanner.Tests\Bolt.IocScanner.Tests.csproj", "{18FEDD69-7118-4752-870B-E50907A1EE66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bolt.IocAttributes", "Bolt.IocAttributes\Bolt.IocAttributes.csproj", "{67078D75-3C9D-4D5B-A389-315077E8EAB0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{18FEDD69-7118-4752-870B-E50907A1EE66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18FEDD69-7118-4752-870B-E50907A1EE66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18FEDD69-7118-4752-870B-E50907A1EE66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67078D75-3C9D-4D5B-A389-315077E8EAB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67078D75-3C9D-4D5B-A389-315077E8EAB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67078D75-3C9D-4D5B-A389-315077E8EAB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67078D75-3C9D-4D5B-A389-315077E8EAB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
-﻿using Xunit;
+﻿using Bolt.IocScanner.Attributes;
+using Xunit;
 using Shouldly;
-using Bolt.IocAttributes;
 
 namespace Bolt.IocScanner.Tests
 {

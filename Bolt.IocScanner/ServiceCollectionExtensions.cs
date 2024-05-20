@@ -1,10 +1,10 @@
-﻿using Bolt.IocAttributes;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Bolt.IocScanner.Attributes;
 
 namespace Bolt.IocScanner
 {
@@ -22,7 +22,7 @@ namespace Bolt.IocScanner
         }
 
         public IEnumerable<Type> TypesToExclude { get; set; }
-        public bool SkipWhenAutoBindMissing { get; set; }
+        public bool SkipWhenAutoBindMissing { get; set; } = true;
     }
 
     public static class ServiceCollectionExtensions

@@ -1,9 +1,9 @@
-﻿using Bolt.IocAttributes;
-using Xunit;
+﻿using Xunit;
 using Shouldly;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
 using System;
+using Bolt.IocScanner.Attributes;
 
 namespace Bolt.IocScanner.Tests
 {

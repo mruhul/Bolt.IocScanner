@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bolt.IocAttributes
+namespace Bolt.IocScanner.Attributes
 {
     public class SkipAutoBindAttribute : Attribute
     {
