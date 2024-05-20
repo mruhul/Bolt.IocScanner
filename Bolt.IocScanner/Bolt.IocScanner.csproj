@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Scan and bind your classes in Ioc automatically</Description>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>4.0.0</Version>
+    <Version>6.0.0</Version>
     <Authors>Mohammad Ruhul Amin</Authors>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Bolt.IocScanner</AssemblyName>
