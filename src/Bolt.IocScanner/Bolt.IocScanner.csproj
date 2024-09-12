@@ -4,7 +4,6 @@
     <Description>Scan and bind your classes in Ioc automatically</Description>
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>12</LangVersion>
-    <Version>8.0.0-beta01</Version>
     <Authors>Mohammad Ruhul Amin</Authors>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Bolt.IocScanner</AssemblyName>
