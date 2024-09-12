@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Bolt.IocScanner.Attributes;
 using Microsoft.Extensions.Configuration;
 
 namespace Bolt.IocScanner
@@ -18,7 +15,7 @@ namespace Bolt.IocScanner
         /// <param name="options"></param>
         public static IServiceCollection Scan<T>(this IServiceCollection services, IocScannerOptions options)
         {
-            return Scan(services, new[] { typeof(T).GetTypeInfo().Assembly }, options);
+            return ScanInternal(services, new[] { typeof(T).GetTypeInfo().Assembly }, null, options);
         }
         
 
@@ -37,17 +34,24 @@ namespace Bolt.IocScanner
             return ScanInternal(services, new[] { typeof(T).GetTypeInfo().Assembly }, configuration, options);
         }
 
+        /// <summary>
+        /// Scan supplied assemblies and bind them automatically to service collection based on attribute and convention
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="assemblies"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static IServiceCollection Scan(this IServiceCollection services, 
             IEnumerable<Assembly> assemblies, 
             IocScannerOptions options)
         {
-            new ScannerAndBinder(services, null).Run(assemblies.ToArray(), options);
-
-            return services;
+            return ScanInternal(services, assemblies.ToArray(), null, options);
         }
 
         /// <summary>
         /// Scan supplied assemblies and bind them automatically to service collection based on attribute and convention
+        /// when configuration not null the method also make all settings available to use as IOption that has
+        /// BindFromConfig attribute
         /// </summary>
         /// <param name="services"></param>
         /// <param name="assemblies"></param>
@@ -58,9 +62,7 @@ namespace Bolt.IocScanner
             IConfiguration configuration = null,
             IocScannerOptions options = null)
         {
-            new ScannerAndBinder(services, configuration).Run(assemblies.ToArray(), options);
-
-            return services;
+            return ScanInternal(services, assemblies.ToArray(), configuration, options);
         }
         
         private static IServiceCollection ScanInternal(this IServiceCollection services, 
