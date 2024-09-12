@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bolt.IocScanner\Bolt.IocScanner.csproj" />
+    <ProjectReference Include="..\..\src\Bolt.IocScanner\Bolt.IocScanner.csproj" />
   </ItemGroup>
 
 </Project>

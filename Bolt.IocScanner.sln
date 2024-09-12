@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bolt.IocScanner", "Bolt.IocScanner\Bolt.IocScanner.csproj", "{94E180A3-CCD6-4C53-A7CE-11B6A219A326}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bolt.IocScanner", "src\Bolt.IocScanner\Bolt.IocScanner.csproj", "{94E180A3-CCD6-4C53-A7CE-11B6A219A326}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bolt.IocScanner.Tests", "Bolt.IocScanner.Tests\Bolt.IocScanner.Tests.csproj", "{18FEDD69-7118-4752-870B-E50907A1EE66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bolt.IocScanner.Tests", "tests\Bolt.IocScanner.Tests\Bolt.IocScanner.Tests.csproj", "{18FEDD69-7118-4752-870B-E50907A1EE66}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{8F1EC245-76B8-409C-91C0-256442C13FB1}"
 	ProjectSection(SolutionItems) = preProject
