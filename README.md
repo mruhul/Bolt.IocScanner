@@ -170,3 +170,79 @@ The library scan for `IServiceRegistry` interface and execute them to allow you 
         }
     } 
 
+# Auto configure Settings from configurtion
+
+### How I can configure settings automatically from configuration
+
+Define you settings DTO and decorate with attribute `BindFromConfig`
+
+```csharp
+    [BindFromConfig]
+    public class TenantSettings
+    {
+        public string Theme {get; set; }
+    }    
+```
+
+Now make sure you define the settings in `appsettings.config` or your configuration providers.
+
+```json
+    {
+      "App": {
+        "TenantSettings": {
+          "Theme": "dark"
+        }
+      }
+    } 
+```
+
+You should able to use this settings as below:
+
+```csharp
+public class ColorPicker(IOptions<TenantSettings> options)
+{
+    public string TextColor()
+    {
+        if(options.Value.Theme == "dark") return "white";
+        return "black";
+    }
+}
+```
+
+### Can i define from which section settings should load?
+
+Yes you can. See example below:
+
+```csharp
+    [BindFromConfig("Bolt:Tenants:Settings", isOptional: false)]
+    public class TenantSettings
+    {
+        public string Theme {get; set; }
+    }  
+```
+
+Now the system will load the settings from defined section name in attribute.
+
+```json
+{
+  "Bolt": {
+    "Tenants": {
+      "Settings": {
+        "Theme": "dark"
+      }
+    }
+  }
+} 
+```
+
+## Can I make settings optional?
+
+Yes you can. Just pass `isOptional` to `true` as below:
+
+```csharp
+    [BindFromConfig("Bolt:Tenants:Settings", isOptional: true)]
+    public class TenantSettings
+    {
+        public string Theme {get; set; }
+    }  
+```
