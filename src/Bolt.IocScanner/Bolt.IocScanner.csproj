@@ -9,8 +9,6 @@
     <AssemblyName>Bolt.IocScanner</AssemblyName>
     <PackageId>Bolt.IocScanner</PackageId>
     <PackageTags>Bolt.IocScanner</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>../nupkgs</PackageOutputPath>
     <PackageProjectUrl>https://github.com/mruhul/Bolt.IocScanner</PackageProjectUrl>
   </PropertyGroup>
 
