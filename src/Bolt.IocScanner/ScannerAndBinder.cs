@@ -23,6 +23,8 @@ public class ScannerAndBinder
 
     public void Run(Assembly[] assemblies, IocScannerOptions options)
     {
+        options ??= new IocScannerOptions();
+        
         foreach (var assembly in assemblies)
         {
             Run(assembly, options);
