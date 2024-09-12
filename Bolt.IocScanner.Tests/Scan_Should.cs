@@ -26,7 +26,6 @@ namespace Bolt.IocScanner.Tests
         {
             var sp = new ServiceProviderHelper(new[] { typeof(IgnoreHelloWorldWithoutAutoBind).Assembly }, new IocScannerOptions
             {
-                SkipWhenAutoBindMissing = true
             });
 
             var sut = sp.GetService<IgnoreHelloWorldWithoutAutoBind>();
@@ -59,6 +58,7 @@ namespace Bolt.IocScanner.Tests
 
     public interface IHelloWorldThirdInterface { }
 
+    [AutoBind]
     public class MultipleInterfaceHelloWorld : AbstractHelloWorld, IHelloWorldSecondInterface, IHelloWorldThirdInterface
     {
 

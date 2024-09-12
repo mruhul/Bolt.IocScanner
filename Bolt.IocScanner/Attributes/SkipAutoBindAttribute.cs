@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 
-namespace Bolt.IocScanner.Attributes
+namespace Bolt.IocScanner.Attributes;
+
+public class SkipAutoBindAttribute : Attribute
 {
-    public class SkipAutoBindAttribute : Attribute
-    {
-    }
 }

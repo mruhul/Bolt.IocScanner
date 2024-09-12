@@ -47,9 +47,7 @@ namespace Bolt.IocScanner.Tests
         {
             _sp = new ServiceProviderHelper(new IocScannerOptions
             {
-                TypesToExclude = new[] { typeof(ExcludeHelloWorldFromExcludeList) },
-                SkipWhenAutoBindMissing = false
-            }.Exclude(t => t.Name.Equals("Startup")));
+            });
         }
 
         public IServiceProvider ServiceProvider => _sp.ServiceProvider;

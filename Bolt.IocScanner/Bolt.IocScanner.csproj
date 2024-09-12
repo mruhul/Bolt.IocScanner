@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <Description>Scan and bind your classes in Ioc automatically</Description>
-    <TargetFramework>net8.0</TargetFramework>
-    <Version>7.0.0</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>12</LangVersion>
+    <Version>8.0.0-beta01</Version>
     <Authors>Mohammad Ruhul Amin</Authors>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Bolt.IocScanner</AssemblyName>
@@ -15,7 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

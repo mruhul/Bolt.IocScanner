@@ -29,6 +29,7 @@ namespace Bolt.IocScanner.Tests
         string Hello();
     }
 
+    [AutoBind]
     public class TransientHelloWorld : ITransientHelloWorld
     {
         public string Hello()

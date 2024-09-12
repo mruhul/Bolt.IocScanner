@@ -5,7 +5,6 @@ using Bolt.IocScanner.Attributes;
 
 namespace Bolt.IocScanner.Tests
 {
-    [SkipAutoBind]
     public class AutoBindSelf_Should : IClassFixture<ServiceProviderFixture>
     {
         private readonly ServiceProviderFixture _fixture;

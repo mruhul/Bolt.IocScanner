@@ -1,14 +1,15 @@
 # Bolt.IocScanner
-A utlity library that scan and bind your classes automatically to Ioc
+A utility library that scan and bind your classes automatically to IOC based
+on Attribute and also can bind strong type data as IOptions<T> from configuration.
 
 ## How I use this library?
 
 Add a reference of latest nuget package of Bolt.IocScanner. In your Startup class add following lines
 
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.Scan<Startup>();
-    }
+    builder.Services.Scan<Startup>();
+    // Or if you want to bind options from configuration pas configuration
+    builser.Services.Scan<Startup>(builder.Configuration)
+    
 
 Now all classes in the same assembly of Startup class will be scanned and automatically bind to servicecollection. For example you create a new class in same project as below:
 
@@ -17,6 +18,7 @@ Now all classes in the same assembly of Startup class will be scanned and automa
         Task<Book> Get(string id);
     }
     
+    [AutoBind]
     public class BooksProxy : IBooksProxy
     {
         public Task<Book> Get(string id)
@@ -42,17 +44,14 @@ You don't need to open the startup class and add code to register this proxy cla
 
 Yes you can. Here is an example:
     
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.Scan(new []{
+    builder.Services.Scan(new []{
             typeof(BookStore.Web.Startup).Assembly,
             typeof(BookStore.Infrastructure.ISerializer).Assembly
-        });
-    }
+        }, build.Configuration);
 
 ## How can I bind a class to self without using an inteface?
 
-If a class doesn't implement any interface then the lib doesn't bind it automatically. You have to put AutoBind attribute to bind a class without interface. Then the library bind that class to self with lifecycle instructed in the attribute. See example below:
+Just add `AutoBind` attribute to that class. When a class doesn't have any interface then it bind to self:
 
     [AutoBind]
     public class BooksProxy
@@ -72,6 +71,20 @@ If a class doesn't implement any interface then the lib doesn't bind it automati
             _proxy = proxy;
         }
     }
+
+## Can I bind classes automatically based on convention?
+
+Yes you can. Here is an example where all classes matches the criteria 
+will bind automatically without the need to add `AutoBind` attribute.
+
+```csharp
+    
+    builder.Services.Scan<Startup>(new IocScannerOptions
+    {
+        BindServicesOnMatch = (type) => ["Provider","Service"].Any(x => type.Name.EndsWith(x))    
+    });
+```
+
 
 ## How I can control the lifecycle of the bindings?
 
@@ -103,15 +116,13 @@ Theres four ways you can do this.
 
     }
 
-### you can add the class type as exclude items of scan options as below
+### exclude some interfaces to bind against.
 
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.Scan<Startup>(new IocScannerOptions
+    // By default we exclude IDispoable interface
+    services.Scan<Startup>(new IocScannerOptions
         {
-            TypesToExclude = new[] { typeof(ThisClassNotBind) }
+            InterfacesToExclude = new[] { typeof(ThisClassNotBind) }
         });
-    }
 
 ### you can tell in option that only bind when an "AutoBind" attribute provided. In that case any class in assemblies doesn't have "AutoBind" attribute will not be registered in ioc.
 
@@ -134,7 +145,8 @@ Theres four ways you can do this.
 
 ## Does it bind to all implemented interfaces?
 
-Yes if a class implement more than one interfaces the lib bind the class against all interfaces. In case of Singleton and Scoped lifecycle all interface bind against same instance. For example:
+Yes if a class implement more than one interfaces the lib bind the class against all interfaces. In case of Singleton and Scoped lifecycle all interface bind against same instance unless
+any interface provided in `InterfacesToExclude` property of `IocScannerOptions`. For example:
 
     [AutoBind(LifeCycle.Singleton)]
     public class Implementation : IProvideName, IProvidePrice
@@ -145,20 +157,10 @@ Now if you request for IProvideName and IProvidePrice both case the service prov
 
 Same applies for Scoped lifecycle but in that case the behaviour is true for same scope. For new scope a new instance of Implementation will be provided by service provider.
 
-## How can I ask to register using TryAdd instead
 
-Sometimes you want to change the registration of your implementation when you setup Ioc in your test projects. In that case sometimes its easy to achieve if we use TryAdd instead of Add. So yes you can tell to use TryAdd instead of Add when register your implementation as below:
+## I want to control how to bind but define in different area of the project
 
-    [AutoBind(UseTryAdd = true)]
-    public class BooksProxy
-    {
-
-    }
-
-
-## I have complex setup. how can i define myself
-
-You can define in configureservices method inside startup as you use to do before, other option is write a class that implements IServiceRegistry that the lib will execute those implementation. Benefit of this you are not bound to startup class and you can organize your ioc registration code any folder you want. Help to achieve feature focused development and seperate code by feature. Sample implementation:
+The library scan for `IServiceRegistry` interface and execute them to allow you to bind by yourself.
 
     public class SampleRegistration : IServiceRegistry
     {

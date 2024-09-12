@@ -1,19 +1,17 @@
 ﻿using System;
 
-namespace Bolt.IocScanner.Attributes
+namespace Bolt.IocScanner.Attributes;
+
+public class AutoBindAttribute : Attribute
 {
-    public class AutoBindAttribute : Attribute
+    public AutoBindAttribute() : this(LifeCycle.Transient)
     {
-        public AutoBindAttribute() : this(LifeCycle.Transient)
-        {
-        }
-
-        public AutoBindAttribute(LifeCycle lifeCycle)
-        {
-            LifeCycle = lifeCycle;
-        }
-
-        public LifeCycle LifeCycle { get; private set; }
-        public bool UseTryAdd { get; set; }
     }
+
+    public AutoBindAttribute(LifeCycle lifeCycle)
+    {
+        LifeCycle = lifeCycle;
+    }
+
+    public LifeCycle LifeCycle { get; private set; }
 }
